@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="4dp"
+    app:cardElevation="4dp">
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_description"
+        android:padding="4dp"
+        android:maxLines="8"
+        android:ellipsize="end"
+        tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin et tellus at nibh feugiat vehicula id feugiat ex. Sed tempor orci nec egestas fermentum. Morbi iaculis, tortor eget bibendum fringilla, nisl sapien imperdiet massa, ac pulvinar eros nulla a dolor."/>
+
+</android.support.v7.widget.CardView>
