@@ -23,6 +23,7 @@ import com.example.nhoxb.breakingnews.model.Article;
 import com.example.nhoxb.breakingnews.model.ArticleResponse;
 import com.example.nhoxb.breakingnews.utils.Constants;
 import com.example.nhoxb.breakingnews.utils.EndlessRecyclerViewScrollListener;
+import com.example.nhoxb.breakingnews.utils.FilterDialog;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
@@ -33,6 +34,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Filter;
 
 import cz.msebera.android.httpclient.Header;
 
@@ -79,14 +81,12 @@ public class MainActivity extends AppCompatActivity {
             public void onLoadMore(int page, int totalItemsCount) {
                 mLoadMoreProgressBar.setVisibility(View.VISIBLE);
                 Map map = new HashMap();
-                map.put("sort", "newest");
                 map.put("page",String.valueOf(page));
                 loadMoreArticle(map);
             }
         });
 
         Map map = new HashMap();
-        map.put("sort", "newest");
         loadMoreArticle(map);
     }
 
@@ -108,7 +108,6 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 Map map = new HashMap();
-                map.put("sort", "newest");
                 map.put("q",query);
                 loadArticle(map);
                 return true;
@@ -129,7 +128,13 @@ public class MainActivity extends AppCompatActivity {
         switch (item.getItemId())
         {
             case R.id.item_sort:
-                Toast.makeText(MainActivity.this, "Sort", Toast.LENGTH_SHORT).show();
+                FilterDialog dialog = new FilterDialog(this) {
+                    @Override
+                    public void onResponse(Map<String, String> map) {
+                        loadArticle(map);
+                    }
+                };
+                dialog.show();
                 return true;
         }
         return super.onOptionsItemSelected(item);

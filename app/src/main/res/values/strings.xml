@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Breaking News</string>
+
+    <string-array name="sort_array">
+        <item>Newest</item>
+        <item>Oldest</item>
+    </string-array>
 </resources>
