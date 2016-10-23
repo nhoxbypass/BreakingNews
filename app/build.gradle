@@ -1,6 +1,5 @@
 apply plugin: 'com.android.application'
 apply plugin: 'android-apt'
-apply plugin: 'com.android.application'
 
 apply plugin: 'me.tatarka.retrolambda' // make sure to apply last!
 
@@ -14,9 +13,6 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    retrolambda {
-        jdk '/path/to/java-8/jdk'
-    }
 
     defaultConfig {
         applicationId "com.example.nhoxb.breakingnews"
