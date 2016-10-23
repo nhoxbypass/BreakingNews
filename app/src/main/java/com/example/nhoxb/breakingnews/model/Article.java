@@ -2,11 +2,15 @@ package com.example.nhoxb.breakingnews.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import org.parceler.Parcel;
+
 import java.util.List;
 
 /**
  * Created by nhoxb on 10/21/2016.
  */
+
+@Parcel
 public class Article {
 
     @SerializedName("_id")
@@ -23,6 +27,10 @@ public class Article {
     private String sectionName;
     @SerializedName("multimedia")
     private List<Multimedia> multimediaList;
+
+    // empty constructor needed by the Parceler library
+    public Article() {
+    }
 
     public Article(String id, String webUrl, String snippet, String publishDate, String newsDesk, String sectionName, List<Multimedia> multimediaList) {
         this.id = id;

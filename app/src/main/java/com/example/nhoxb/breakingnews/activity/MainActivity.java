@@ -43,6 +43,8 @@ import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.RequestParams;
 import com.loopj.android.http.TextHttpResponseHandler;
 
+import org.parceler.Parcels;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     Map<String, String> queryMap;
     AsyncHttp asyncHttp;
 
-    public static final String URL_KEY = "url";
+    public static final String ARTICLE_KEY = "url";
 
     private interface ResponseInterface {
         void onResponse(List<Article> articleList);
@@ -92,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
         mRecyclerView.setAdapter(mListAdapter);
         mListAdapter.setOnItemClickListener(article -> {
             Intent intent = new Intent(MainActivity.this, ArticleDetailActivity.class);
-            intent.putExtra(URL_KEY, article.getWebUrl());
+
+            intent.putExtra(ARTICLE_KEY, Parcels.wrap(article));
             startActivity(intent);
         });
 
@@ -193,7 +196,7 @@ public class MainActivity extends AppCompatActivity {
                             ArticleResponse articleResponse = gson.fromJson(jsonResponse.getAsJsonObject("response"), ArticleResponse.class);
                             //mListAdapter.setArticles(articleResponse.getListArticle());
                             responseInterface.onResponse(articleResponse.getListArticle());
-                            Toast.makeText(MainActivity.this, mListAdapter.getItemCount() + "", Toast.LENGTH_SHORT).show();
+
                             handleLoadComplete();
                         }
                     }

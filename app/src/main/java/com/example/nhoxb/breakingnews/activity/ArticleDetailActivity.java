@@ -16,6 +16,9 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.example.nhoxb.breakingnews.R;
+import com.example.nhoxb.breakingnews.model.Article;
+
+import org.parceler.Parcels;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,8 +42,8 @@ public class ArticleDetailActivity extends AppCompatActivity {
         //webView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
         webView.setWebViewClient(new MyBrowser());
 
-        url = getIntent().getStringExtra(MainActivity.URL_KEY);
-        webView.loadUrl(url);
+        Article user = (Article) Parcels.unwrap(getIntent().getParcelableExtra(MainActivity.ARTICLE_KEY));
+        webView.loadUrl(user.getWebUrl());
     }
 
     @Override
