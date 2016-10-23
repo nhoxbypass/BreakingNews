@@ -8,13 +8,18 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.example.nhoxb.breakingnews.R;
 import com.example.nhoxb.breakingnews.model.Article;
+import com.example.nhoxb.breakingnews.model.Multimedia;
 import com.example.nhoxb.breakingnews.utils.Constants;
-import com.squareup.picasso.Picasso;
+import com.example.nhoxb.breakingnews.utils.UiUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * Created by nhoxb on 10/21/2016.
@@ -89,27 +94,21 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             switch (getItemViewType(position)) {
                 case NORMAL_ARTICLE:
                     ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
-                    Picasso.with(articleViewHolder.imageView.getContext())
-                            .load(article.getMultimediaList().get(0).getUrl())
+                    Multimedia multimedia = article.getMultimediaList().get(0);
+                    ViewGroup.LayoutParams params  = ((ArticleViewHolder) holder).imageView.getLayoutParams();
+                    params.height = (int) UiUtils.convertDpToPixel(multimedia.getHeight(), articleViewHolder.imageView.getContext());
+                    articleViewHolder.imageView.setLayoutParams(params);
+                    Glide.with(articleViewHolder.imageView.getContext())
+                            .load(multimedia.getUrl())
                             .into(articleViewHolder.imageView);
                     articleViewHolder.textView.setText(article.getSnippet());
-                    articleViewHolder.itemContainer.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mListener.onArticleClick(article);
-                        }
-                    });
+                    articleViewHolder.itemContainer.setOnClickListener(view -> mListener.onArticleClick(article));
                     break;
 
                 case TEXT_ARTICLE:
                     TextArticleViewHolder textViewHolder = (TextArticleViewHolder) holder;
                     textViewHolder.textView.setText(article.getSnippet());
-                    textViewHolder.textView.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            mListener.onArticleClick(article);
-                        }
-                    });
+                    textViewHolder.textView.setOnClickListener(view -> mListener.onArticleClick(article));
                     break;
             }
         }
@@ -123,26 +122,23 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     class ArticleViewHolder extends RecyclerView.ViewHolder
     {
-        public ImageView imageView;
-        public TextView textView;
-        public CardView itemContainer;
+        @BindView(R.id.iv_article) public ImageView imageView;
+        @BindView(R.id.tv_description) public TextView textView;
+        @BindView(R.id.cv_item_container) public CardView itemContainer;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
-
-            itemContainer = (CardView) itemView.findViewById(R.id.cv_item_container);
-            imageView = (ImageView) itemView.findViewById(R.id.iv_article);
-            textView = (TextView) itemView.findViewById(R.id.tv_description);
+            ButterKnife.bind(this, itemView);
         }
     }
 
     class TextArticleViewHolder extends RecyclerView.ViewHolder
     {
-        public TextView textView;
+        @BindView(R.id.tv_description) public TextView textView;
 
         public TextArticleViewHolder(View itemView) {
             super(itemView);
-            textView = (TextView) itemView.findViewById(R.id.tv_description);
+            ButterKnife.bind(this, itemView);
         }
     }
 

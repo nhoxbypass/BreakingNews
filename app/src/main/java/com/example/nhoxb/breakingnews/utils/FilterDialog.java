@@ -55,23 +55,20 @@ public abstract class FilterDialog {
         checkBoxC = (CheckBox) mDialog.findViewById(R.id.checkbox_c);
         btnSubmit = (Button) mDialog.findViewById(R.id.btn_submit);
 
-        btnSubmit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                //
-                Map<String, String> map = new HashMap<>();
+        btnSubmit.setOnClickListener(view -> {
+            //
+            Map<String, String> map = new HashMap<>();
 
-                String newsDesk = getNewsDeskString();
-                if (newsDesk != "" || !newsDesk.equals(""))
-                {
-                    map.put("fq", getNewsDeskString());
-                }
-                map.put("sort", spinner.getSelectedItem().toString());
-                map.put("begin_date", getDateString());
-                onResponse(map);
-
-                mDialog.dismiss();
+            String newsDesk = getNewsDeskString();
+            if (newsDesk != "" || !newsDesk.equals(""))
+            {
+                map.put("fq", getNewsDeskString());
             }
+            map.put("sort", spinner.getSelectedItem().toString());
+            map.put("begin_date", getDateString());
+            onResponse(map);
+
+            mDialog.dismiss();
         });
 
         checkBoxA.setChecked(true);
