@@ -41,7 +41,7 @@ The following **bonus** features are implemented:
 
 The following **additional** features are implemented:
 
-* [ ] List anything else that you can get done to improve the app functionality!
+* [x] Check if their is more articles exist before load
 
 ## Video Walkthrough
 

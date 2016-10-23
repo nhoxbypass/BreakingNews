@@ -218,7 +218,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void loadMoreArticle(final Map<String, String> map) {
-        fetchData(map, articleList -> mListAdapter.addArticles(articleList));
+        fetchData(map, articleList -> {
+            if(!articleList.isEmpty())
+            {
+                //If there are more article -> load
+                mListAdapter.addArticles(articleList);
+            }
+        });
     }
 
     private void handleLoadComplete() {
