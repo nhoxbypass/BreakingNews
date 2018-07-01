@@ -1,4 +1,4 @@
-package com.example.nhoxb.breakingnews.model;
+package com.example.nhoxb.breakingnews.data.remote.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -14,19 +14,19 @@ import java.util.List;
 public class Article {
 
     @SerializedName("_id")
-    private String id;
+    String id;
     @SerializedName("web_url")
-    private String webUrl;
+    String webUrl;
     @SerializedName("snippet")
-    private String snippet;
+    String snippet;
     @SerializedName("pub_date")
-    private String publishDate;
+    String publishDate;
     @SerializedName("news_desk")
-    private String newsDesk;
+    String newsDesk;
     @SerializedName("section_name")
-    private String sectionName;
+    String sectionName;
     @SerializedName("multimedia")
-    private List<Multimedia> multimediaList;
+    List<Multimedia> multimediaList;
 
     // empty constructor needed by the Parceler library
     public Article() {

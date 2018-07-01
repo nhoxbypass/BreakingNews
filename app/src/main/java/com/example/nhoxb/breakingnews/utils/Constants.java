@@ -5,6 +5,7 @@ package com.example.nhoxb.breakingnews.utils;
  */
 public class Constants {
     public static final String ARTICLE_SEARCH_API = "febb51ccb085400388711931e653c903";
-    public static final String BASE_URL = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
-    public static final String IMG_BASE_URL = "http://www.nytimes.com/";
+
+    public static final String QUERY_KEY = "q";
+    public static final String QUERY_KEY_PAGE = "page";
 }

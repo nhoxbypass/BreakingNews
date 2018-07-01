@@ -1,12 +1,11 @@
-package com.example.nhoxb.breakingnews.utils;
+package com.example.nhoxb.breakingnews.ui.main;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.view.View;
+import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.Checkable;
 import android.widget.DatePicker;
 import android.widget.Spinner;
 
@@ -18,74 +17,71 @@ import java.util.Map;
 /**
  * Created by nhoxb on 10/23/2016.
  */
-public abstract class FilterDialog {
-    Activity mActivity;
-    Dialog mDialog;
-
-    //Local
+public class FilterDialog extends Dialog {
+    // Local
     DatePicker datePicker;
     Spinner spinner;
     CheckBox checkBoxA, checkBoxB, checkBoxC;
     Button btnSubmit;
 
-    public abstract void onResponse(Map<String, String> map);
+    private OnResponseListener listener;
 
-    public FilterDialog(Activity activity) {
-        this.mActivity = activity;
-        this.mDialog = new Dialog(mActivity);
+    public FilterDialog(@NonNull Context context) {
+        this(context, null);
+    }
+
+    public FilterDialog(@NonNull Context context, OnResponseListener listener) {
+        super(context);
         dialogContentInit();
+        setOnResponseListener(listener);
     }
 
-    public void show()
-    {
-        mDialog.show();
+    public void setOnResponseListener(OnResponseListener listener) {
+        this.listener = listener;
     }
 
-    private void dialogContentInit()
-    {
-        mDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        mDialog.setCancelable(false);
-        mDialog.setContentView(R.layout.dialog_filter);
+    private void dialogContentInit() {
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        setCancelable(false);
+        setContentView(R.layout.dialog_filter);
 
         //Find view
-        datePicker = (DatePicker) mDialog.findViewById(R.id.dp_begindate);
-        spinner = (Spinner) mDialog.findViewById(R.id.spinner);
-        checkBoxA = (CheckBox) mDialog.findViewById(R.id.checkbox_a);
-        checkBoxB = (CheckBox) mDialog.findViewById(R.id.checkbox_b);
-        checkBoxC = (CheckBox) mDialog.findViewById(R.id.checkbox_c);
-        btnSubmit = (Button) mDialog.findViewById(R.id.btn_submit);
+        datePicker = findViewById(R.id.dp_begindate);
+        spinner = findViewById(R.id.spinner);
+        checkBoxA = findViewById(R.id.checkbox_a);
+        checkBoxB = findViewById(R.id.checkbox_b);
+        checkBoxC = findViewById(R.id.checkbox_c);
+        btnSubmit = findViewById(R.id.btn_submit);
 
         btnSubmit.setOnClickListener(view -> {
             //
             Map<String, String> map = new HashMap<>();
 
             String newsDesk = getNewsDeskString();
-            if (newsDesk != "" || !newsDesk.equals(""))
-            {
+            if (!newsDesk.isEmpty()) {
                 map.put("fq", getNewsDeskString());
             }
             map.put("sort", spinner.getSelectedItem().toString());
             map.put("begin_date", getDateString());
-            onResponse(map);
 
-            mDialog.dismiss();
+            if (listener != null)
+                listener.onResponse(map);
+
+            dismiss();
         });
 
         checkBoxA.setChecked(true);
     }
 
-    String getDateString()
-    {
-        String result =  String.valueOf(datePicker.getYear());
+    private String getDateString() {
+        String result = String.valueOf(datePicker.getYear());
 
-        if (datePicker.getMonth() < 10)
-        {
+        if (datePicker.getMonth() < 10) {
             result += '0';
         }
         result += String.valueOf(datePicker.getMonth());
 
-        if (datePicker.getDayOfMonth() < 10)
-        {
+        if (datePicker.getDayOfMonth() < 10) {
             result += '0';
         }
         result += String.valueOf(datePicker.getDayOfMonth());
@@ -93,8 +89,7 @@ public abstract class FilterDialog {
         return result;
     }
 
-    String getNewsDeskString()
-    {
+    private String getNewsDeskString() {
         if (!checkBoxA.isChecked() && !checkBoxB.isChecked() && !checkBoxC.isChecked())
             return "";
 
@@ -108,5 +103,9 @@ public abstract class FilterDialog {
         result += ")";
 
         return result;
+    }
+
+    public interface OnResponseListener {
+        void onResponse(Map<String, String> map);
     }
 }

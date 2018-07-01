@@ -1,4 +1,4 @@
-package com.example.nhoxb.breakingnews.model;
+package com.example.nhoxb.breakingnews.data.remote.model;
 
 import com.google.gson.annotations.SerializedName;
 
@@ -12,12 +12,12 @@ import java.util.List;
 
 @Parcel
 public class ArticleResponse {
+    @SerializedName("docs")
+    List<Article> listArticle;
+
     // empty constructor needed by the Parceler library
     public ArticleResponse() {
     }
-
-    @SerializedName("docs")
-    private List<Article> listArticle;
 
     public List<Article> getListArticle() {
         return listArticle;

@@ -1,6 +1,6 @@
-package com.example.nhoxb.breakingnews.model;
+package com.example.nhoxb.breakingnews.data.remote.model;
 
-import com.example.nhoxb.breakingnews.utils.Constants;
+import com.example.nhoxb.breakingnews.data.remote.ApiEndPoint;
 
 import org.parceler.Parcel;
 
@@ -11,18 +11,17 @@ import org.parceler.Parcel;
 @Parcel
 public class Multimedia {
 
-    private Integer width;
-    private String url;
-    private Integer height;
-    private String subtype;
-    private String type;
+    Integer width;
+    String url;
+    Integer height;
+    String subtype;
+    String type;
 
     // empty constructor needed by the Parceler library
     public Multimedia() {
     }
 
-    public Multimedia(Integer width, String url, Integer height, String subtype, String type)
-    {
+    public Multimedia(Integer width, String url, Integer height, String subtype, String type) {
         this.width = width;
         this.url = url;
         this.height = height;
@@ -35,7 +34,7 @@ public class Multimedia {
     }
 
     public String getUrl() {
-        return Constants.IMG_BASE_URL + url;
+        return ApiEndPoint.IMG_BASE_URL + url;
     }
 
     public Integer getHeight() {

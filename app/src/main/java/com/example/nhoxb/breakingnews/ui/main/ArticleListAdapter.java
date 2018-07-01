@@ -1,4 +1,4 @@
-package com.example.nhoxb.breakingnews.adapter;
+package com.example.nhoxb.breakingnews.ui.main;
 
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
@@ -10,9 +10,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.example.nhoxb.breakingnews.R;
-import com.example.nhoxb.breakingnews.model.Article;
-import com.example.nhoxb.breakingnews.model.Multimedia;
-import com.example.nhoxb.breakingnews.utils.Constants;
+import com.example.nhoxb.breakingnews.data.remote.model.Article;
+import com.example.nhoxb.breakingnews.data.remote.model.Multimedia;
 import com.example.nhoxb.breakingnews.utils.UiUtils;
 
 import java.util.ArrayList;
@@ -28,6 +27,7 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     private static final int NORMAL_ARTICLE = 0;
     private static final int TEXT_ARTICLE = 1;
+
     //Variables
     List<Article> mArticleList;
     OnArticleClickListener mListener;
@@ -40,20 +40,17 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         this.mArticleList = articleList;
     }
 
-    public void setOnItemClickListener(OnArticleClickListener listener)
-    {
+    public void setOnItemClickListener(OnArticleClickListener listener) {
         this.mListener = listener;
     }
 
-    public void setArticles(List<Article> articleList)
-    {
+    public void setArticles(List<Article> articleList) {
         this.mArticleList.clear();
         this.mArticleList.addAll(articleList);
         notifyDataSetChanged();
     }
 
-    public void addArticles(List<Article> articleList)
-    {
+    public void addArticles(List<Article> articleList) {
         int position = this.mArticleList.size();
         this.mArticleList.addAll(articleList);
         notifyItemRangeInserted(position, articleList.size());
@@ -72,10 +69,9 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
         View itemView;
-        switch (viewType)
-        {
+        switch (viewType) {
             case NORMAL_ARTICLE:
-                itemView = layoutInflater.inflate(R.layout.item_article,parent,false);
+                itemView = layoutInflater.inflate(R.layout.item_article, parent, false);
                 return new ArticleViewHolder(itemView);
 
             case TEXT_ARTICLE:
@@ -93,25 +89,30 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         if (article != null) {
             switch (getItemViewType(position)) {
                 case NORMAL_ARTICLE:
-                    ArticleViewHolder articleViewHolder = (ArticleViewHolder) holder;
-                    Multimedia multimedia = article.getMultimediaList().get(0);
-                    ViewGroup.LayoutParams params  = ((ArticleViewHolder) holder).imageView.getLayoutParams();
-                    params.height = (int) UiUtils.convertDpToPixel(multimedia.getHeight(), articleViewHolder.imageView.getContext());
-                    articleViewHolder.imageView.setLayoutParams(params);
-                    Glide.with(articleViewHolder.imageView.getContext())
-                            .load(multimedia.getUrl())
-                            .into(articleViewHolder.imageView);
-                    articleViewHolder.textView.setText(article.getSnippet());
-                    articleViewHolder.itemContainer.setOnClickListener(view -> mListener.onArticleClick(article));
+                    bindNormalArticle((ArticleViewHolder) holder, article);
                     break;
 
                 case TEXT_ARTICLE:
-                    TextArticleViewHolder textViewHolder = (TextArticleViewHolder) holder;
-                    textViewHolder.textView.setText(article.getSnippet());
-                    textViewHolder.textView.setOnClickListener(view -> mListener.onArticleClick(article));
+                    bindTextArticle((TextArticleViewHolder) holder, article);
                     break;
             }
         }
+    }
+
+    private void bindNormalArticle(ArticleViewHolder holder, Article article) {
+        Multimedia multimedia = article.getMultimediaList().get(0);
+
+        ViewGroup.LayoutParams params = holder.imageView.getLayoutParams();
+        params.height = (int) UiUtils.convertDpToPixel(multimedia.getHeight(), holder.imageView.getContext());
+        holder.imageView.setLayoutParams(params);
+        Glide.with(holder.imageView.getContext())
+                .load(multimedia.getUrl())
+                .into(holder.imageView);
+        holder.textView.setText(article.getSnippet());
+    }
+
+    private void bindTextArticle(TextArticleViewHolder viewHolder, Article article) {
+        viewHolder.textView.setText(article.getSnippet());
     }
 
 
@@ -120,30 +121,33 @@ public class ArticleListAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         return mArticleList.size();
     }
 
-    class ArticleViewHolder extends RecyclerView.ViewHolder
-    {
-        @BindView(R.id.iv_article) public ImageView imageView;
-        @BindView(R.id.tv_description) public TextView textView;
-        @BindView(R.id.cv_item_container) public CardView itemContainer;
+    public interface OnArticleClickListener {
+        void onArticleClick(Article article);
+    }
+
+    class ArticleViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.iv_article)
+        public ImageView imageView;
+        @BindView(R.id.tv_description)
+        public TextView textView;
+        @BindView(R.id.cv_item_container)
+        public CardView itemContainer;
 
         public ArticleViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            itemContainer.setOnClickListener(view -> mListener.onArticleClick(mArticleList.get(getAdapterPosition())));
         }
     }
 
-    class TextArticleViewHolder extends RecyclerView.ViewHolder
-    {
-        @BindView(R.id.tv_description) public TextView textView;
+    class TextArticleViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.tv_description)
+        public TextView textView;
 
         public TextArticleViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            textView.setOnClickListener(view -> mListener.onArticleClick(mArticleList.get(getAdapterPosition())));
         }
-    }
-
-    public interface OnArticleClickListener
-    {
-        void onArticleClick(Article article);
     }
 }
